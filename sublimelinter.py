@@ -22,6 +22,7 @@ from .lint.queue import queue
 from .lint import persist, util
 from string import Template
 
+import LSP
 
 def plugin_loaded():
     """The ST3 entry point for plugins."""
@@ -149,9 +150,14 @@ class SublimeLinter(sublime_plugin.EventListener):
             if linter.highlight:
                 highlights.add(linter.highlight)
 
+            diagnostics = []
             if linter.errors:
                 for line, errs in linter.errors.items():
                     errors.setdefault(line, []).extend(errs)
+                    for (col, message) in errs:
+                        diagnostics.append(((line, col), 'error', message))
+
+            LSP.main.update_view_diagnostics(view, linter.name, diagnostics)
 
         # Keep track of one view in each window that shares view's buffer
         window_views = {}
