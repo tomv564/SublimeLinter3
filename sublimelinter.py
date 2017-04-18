@@ -154,8 +154,8 @@ class SublimeLinter(sublime_plugin.EventListener):
             if linter.errors:
                 for line, errs in linter.errors.items():
                     errors.setdefault(line, []).extend(errs)
-                    for (col, message) in errs:
-                        diagnostics.append(((line, col), 'error', message))
+                    for (col, message, error_type) in errs:
+                        diagnostics.append(((line, col), error_type, message))
 
             LSP.main.update_view_diagnostics(view, linter.name, diagnostics)
 

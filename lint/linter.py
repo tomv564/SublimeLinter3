@@ -1720,7 +1720,7 @@ class Linter(metaclass=LinterMeta):
         message = HTML_ENTITY_RE.sub(self.replace_entity, message)
 
         # Strip trailing CR, space and period
-        message = ((col or 0), str(message).rstrip('\r .'))
+        message = ((col or 0), str(message).rstrip('\r .'), error_type)
 
         if line in self.errors:
             self.errors[line].append(message)
